@@ -4,3 +4,10 @@ description = "A distributed key/value store."
 version = "0.1.0"
 edition = "2021"
 authors = ["Andrew Halle <me@andrewhalle.dev>"]
+
+[dependencies]
+anyhow = "1.0.69"
+axum = "0.6.6"
+tokio = { version = "1.25.0", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
