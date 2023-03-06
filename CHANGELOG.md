@@ -7,6 +7,10 @@ adheres to [Semantic Versioning][semver].
 
 ## Unreleased
 
+### Added
+
+- Key/Value HTTP API.
+
 
 [keep-a-changelog]: https://keepachangelog.com/en/1.0.0/
 [semver]: https://semver.org/spec/v2.0.0.html
