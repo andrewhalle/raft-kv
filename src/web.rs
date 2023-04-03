@@ -8,6 +8,7 @@ use axum::{
     routing::get,
     Router,
 };
+use tracing::instrument;
 
 use crate::kv::{self, Store};
 
@@ -34,6 +35,7 @@ struct WebState {
     kv: Arc<Mutex<Store>>,
 }
 
+#[instrument(skip(state))]
 async fn kv_get(State(state): State<WebState>, Path(key): Path<String>) -> impl IntoResponse {
     state
         .kv
@@ -44,6 +46,7 @@ async fn kv_get(State(state): State<WebState>, Path(key): Path<String>) -> impl 
         .map(ToOwned::to_owned)
 }
 
+#[instrument(skip(state))]
 async fn kv_post(
     State(state): State<WebState>,
     Path(key): Path<String>,
@@ -57,6 +60,7 @@ async fn kv_post(
         .map_err(handle_kv_error)
 }
 
+#[instrument(skip(state))]
 async fn kv_put(
     State(state): State<WebState>,
     Path(key): Path<String>,
@@ -70,6 +74,7 @@ async fn kv_put(
         .map_err(handle_kv_error)
 }
 
+#[instrument(skip(state))]
 async fn kv_delete(State(state): State<WebState>, Path(key): Path<String>) -> impl IntoResponse {
     state
         .kv
