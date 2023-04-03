@@ -1,21 +1,21 @@
 use std::collections::HashMap;
 
-pub struct Store {
+pub(super) struct Store {
     data: HashMap<String, String>,
 }
 
 impl Store {
-    pub fn new() -> Self {
+    pub(super) fn new() -> Self {
         Self {
             data: HashMap::new(),
         }
     }
 
-    pub fn get<'a>(&'a self, key: &'_ str) -> Result<&'a str> {
+    pub(super) fn get<'a>(&'a self, key: &'_ str) -> Result<&'a str> {
         self.data.get(key).map(|s| &**s).ok_or(Error::DoesNotExist)
     }
 
-    pub fn insert(&mut self, key: String, value: String) -> Result<()> {
+    pub(super) fn insert(&mut self, key: String, value: String) -> Result<()> {
         if self.data.contains_key(&key) {
             return Err(Error::Exists);
         }
@@ -24,7 +24,7 @@ impl Store {
         Ok(())
     }
 
-    pub fn update(&mut self, key: &str, value: String) -> Result<()> {
+    pub(super) fn update(&mut self, key: &str, value: String) -> Result<()> {
         if !self.data.contains_key(key) {
             return Err(Error::DoesNotExist);
         }
@@ -34,7 +34,7 @@ impl Store {
         Ok(())
     }
 
-    pub fn remove(&mut self, key: &str) -> Result<()> {
+    pub(super) fn remove(&mut self, key: &str) -> Result<()> {
         if !self.data.contains_key(key) {
             return Err(Error::DoesNotExist);
         }
@@ -43,7 +43,7 @@ impl Store {
     }
 }
 
-pub enum Error {
+pub(super) enum Error {
     DoesNotExist,
     Exists,
 }

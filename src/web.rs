@@ -20,7 +20,7 @@ fn router(state: WebState) -> Router {
         .with_state(state)
 }
 
-pub async fn listen_client_requests(kv: Arc<Mutex<Store>>) -> Result<()> {
+pub(super) async fn listen_client_requests(kv: Arc<Mutex<Store>>) -> Result<()> {
     let state = WebState { kv };
     axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
         .serve(router(state).into_make_service())
