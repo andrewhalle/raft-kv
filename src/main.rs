@@ -6,6 +6,7 @@ use tracing_subscriber::{fmt::format::FmtSpan, EnvFilter};
 use crate::kv::Store;
 
 mod kv;
+mod raft;
 mod web;
 
 #[tokio::main]
