@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package raft;
+
+service RaftRpcService {
+  rpc AppendEntries (AppendEntriesRequest) returns (AppendEntriesReply);
+}
+
+message AppendEntriesRequest {
+  int32 term = 1;
+  int32 leaderId = 2;
+  int32 prevLogIndex = 3;
+  int32 prevLogTerm = 4;
+  message Entry {
+    enum Command {
+      UNDEFINED = 0;
+      SetKey = 1;
+      DeleteKey = 2;
+    }
+    Command command = 1;
+    string key = 2;
+    optional string value = 3;
+  }
+  repeated Entry entries = 5;
+  int32 leaderCommit = 6;
+}
+
+message AppendEntriesReply {
+  int32 term = 1;
+  bool success = 2;
+}

@@ -4,3 +4,7 @@ enum State {
     Candidate,
     Leader,
 }
+
+mod rpc {
+    tonic::include_proto!("raft");
+}
