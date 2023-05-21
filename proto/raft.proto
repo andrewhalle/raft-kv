@@ -11,15 +11,19 @@ message AppendEntriesRequest {
   int32 leaderId = 2;
   int32 prevLogIndex = 3;
   int32 prevLogTerm = 4;
+
   message Entry {
-    enum Command {
-      UNDEFINED = 0;
-      SetKey = 1;
-      DeleteKey = 2;
+    message SetKey {
+      string key = 1;
+      string value = 2;
     }
-    Command command = 1;
-    string key = 2;
-    optional string value = 3;
+    message DeleteKey {
+      string key = 1;
+    }
+    oneof command {
+      SetKey setKey = 1;
+      DeleteKey deleteKey = 2;
+    }
   }
   repeated Entry entries = 5;
   int32 leaderCommit = 6;
