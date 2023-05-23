@@ -1,16 +1,21 @@
 use std::sync::{Arc, Mutex};
 
+use clap::Parser;
+use tokio::try_join;
 use tracing::{error, info};
 use tracing_subscriber::{fmt::format::FmtSpan, EnvFilter};
 
-use crate::kv::Store;
+use crate::{cli::Args, kv::Store};
 
+mod cli;
 mod kv;
 mod raft;
 mod web;
 
 #[tokio::main]
 async fn main() {
+    let args = Args::parse();
+
     tracing_subscriber::fmt()
         .with_env_filter(
             EnvFilter::builder()
@@ -25,8 +30,11 @@ async fn main() {
     // TODO: Set up raft state.
     let store = Arc::new(Mutex::new(Store::new()));
     // TODO: Join raft cluster.
-    info!("Starting web server.");
-    if let Err(e) = web::listen_client_requests(store).await {
+    let res = try_join! {
+        web::listen_client_requests(args.http_addr, store),
+        raft::run_raft(args.addr, args.peers, args.to_remove_raft_state),
+    };
+    if let Err(e) = res {
         error!("A fatal error occurred: {e}");
     }
 }

@@ -7,29 +7,30 @@ service RaftRpcService {
 }
 
 message AppendEntriesRequest {
-  int32 term = 1;
-  int32 leaderId = 2;
-  int32 prevLogIndex = 3;
-  int32 prevLogTerm = 4;
+  uint64 term = 1;
+  uint64 leaderId = 2;
+  uint64 prevLogIndex = 3;
+  uint64 prevLogTerm = 4;
 
-  message Entry {
-    message SetKey {
-      string key = 1;
-      string value = 2;
-    }
-    message DeleteKey {
-      string key = 1;
-    }
-    oneof command {
-      SetKey setKey = 1;
-      DeleteKey deleteKey = 2;
-    }
-  }
   repeated Entry entries = 5;
-  int32 leaderCommit = 6;
+  uint64 leaderCommit = 6;
 }
 
 message AppendEntriesReply {
-  int32 term = 1;
+  uint64 term = 1;
   bool success = 2;
+}
+
+message Entry {
+  message SetKey {
+    string key = 1;
+    string value = 2;
+  }
+  message DeleteKey {
+    string key = 1;
+  }
+  oneof command {
+    SetKey setKey = 1;
+    DeleteKey deleteKey = 2;
+  }
 }

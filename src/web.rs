@@ -1,4 +1,7 @@
-use std::sync::{Arc, Mutex};
+use std::{
+    net::SocketAddr,
+    sync::{Arc, Mutex},
+};
 
 use anyhow::Result;
 use axum::{
@@ -8,7 +11,7 @@ use axum::{
     routing::get,
     Router,
 };
-use tracing::instrument;
+use tracing::{info, instrument};
 
 use crate::kv::{self, Store};
 
@@ -21,9 +24,10 @@ fn router(state: WebState) -> Router {
         .with_state(state)
 }
 
-pub(super) async fn listen_client_requests(kv: Arc<Mutex<Store>>) -> Result<()> {
+pub(super) async fn listen_client_requests(addr: SocketAddr, kv: Arc<Mutex<Store>>) -> Result<()> {
+    info!("Starting web server.");
     let state = WebState { kv };
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
+    axum::Server::bind(&addr)
         .serve(router(state).into_make_service())
         .await?;
 
